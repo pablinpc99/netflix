@@ -4,6 +4,7 @@ let maxPags = 0;
 
 //Funciones
 function buscarNombre(nombre) {
+    body.style.height="100vh";
     navPaginacion.style.display = 'none';
     const url = 'http://www.omdbapi.com/?apikey=8d0c6c77&t=' + nombre;
     fetch(url)
@@ -11,10 +12,10 @@ function buscarNombre(nombre) {
         .then(data => {
             if (data.Response === "True") {
                 info.innerHTML = `
-                <p>${data.Title}</p>
-                <p>${data.Year}</p>
-                <img src='${data.Poster}'></img>
-                <p>${data.Language}</p>
+                <h1>${data.Title}</h1>
+                <h2>${data.Year}</h2>
+                <img class='mt-2 mb-2' src='${data.Poster}'></img>
+                <h3>${data.Language}</h3>
                 `;
             } else {
                 alert("No se ha encontrado ninguna peli");
@@ -30,23 +31,24 @@ function listarPelis(nombre) {
         .then(response => response.json())
         .then(data => {
             if (data.Response === "True") {
-            navPaginacion.style.display = 'block';
-            console.log(data);
-            let paginacion = parseInt(data.totalResults / 10) + 1;
-            maxPags = paginacion;
-            goPag.max = maxPags;
-            console.log(maxPags);
-            for (i of data.Search) {
-                info.innerHTML += `
-                <p>${i.Title}</p>
-                <p>${i.Year}</p>
-                <img src='${i.Poster}'></img>
+                navPaginacion.style.display = 'block';
+                console.log(data);
+                let paginacion = parseInt(data.totalResults / 10) + 1;
+                maxPags = paginacion;
+                goPag.max = maxPags;
+                console.log(maxPags);
+                for (i of data.Search) {
+                    info.innerHTML += `
+                <h1>${i.Title}</h1>
+                <h2>${i.Year}</h2>
+                <img class='mb-5' src='${i.Poster}'></img>
+                <br>
                 `;
+                }
+            } else {
+                navPaginacion.style.display = 'none';
+                alert("No se ha encontrado la pelicula");
             }
-        }else{
-            navPaginacion.style.display = 'none';
-            alert("No se ha encontrado la pelicula");
-        }
         })
         .catch(err => console.log(err));
 }
@@ -89,11 +91,12 @@ function textPag(nombre, pag) {
 }
 
 function primeraPag(nombre) {
-        habButtons();
-        pagina = 1;
-        prev.disabled = true;
-        goPag.value = pagina;
-        listarPelis(nombre);
+    body.style.height="";
+    habButtons();
+    pagina = 1;
+    prev.disabled = true;
+    goPag.value = pagina;
+    listarPelis(nombre);
 }
 
 function habButtons() {
